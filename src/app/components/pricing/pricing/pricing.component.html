@@ -1,0 +1,270 @@
+<div class="d-flex static">
+  <div class="text-start bg-black text-warning" *ngIf="!loaderStarted">
+    <p class="text-light fw-bold">{{now}}</p>
+    <p class="h3 my-2" style="color:yellow">Welcome, {{getName()}}</p>
+  </div>
+  <div class=" text-center bg-black flex-grow-1" *ngIf="!loaderStarted">
+    <p class="h3 my-4 text-light">Search to compare between companies using symbol <button (click)="resetPage()"
+        class="reset btn">Reset</button></p>
+  </div>
+  <div class="text-center bg-black flex-grow-1 loader" *ngIf="loaderStarted">
+    <img src="/assets/images/loading.gif">
+    <p class="loading fw-bold m-auto h5 text-warning">Please give us 30 seconds, we have over 30k stocks! :) </p>
+  </div>
+</div>
+
+
+<div class='row'>
+  <div class="col-2">
+    <ul>
+      <li class="bg-black headerEle" style="height:60px; color:yellow">STOCK TICKER <br> <img src="/assets/images/1.png"
+          width="100px" height="30px">
+      </li>
+      <div class="rightProp">
+        <div class="content" *ngFor="let prop of properties; let index = index">
+          <li class="fw-bold" [ngClass]="{
+            'd-none' : index==1 || index==19 || index == 43 || index == 44 || index == 45 || index == 41 || index == 9 || index == 10 ,
+            'fiveR' : index == 24,
+            'divYield' :  index == 47 || index == 74,
+            'blue' : index == 0 || index ==12 || index == 32 || index == 59 || index == 61 || index == 62 || index == 63 || index == 64 || index == 65 || index == 72 || index == 77,
+            'text-blue': index ==63,
+            'light-green' : index==13,
+            'green' : index ==21 || index==26 || index==34 || index==67 || index==80
+          }">
+            <span [innerHTML]="prop.title" [ngClass]="{
+            'bg-black long-item w-100': index == 11 || index == 14 || index == 25 || index == 30 || index == 46 || index == 52 || index == 60 || index == 66 || index == 76,
+            'fiveR' : index == 24,
+            'divYield' :  index == 47 || index == 74,
+            'green' : index ==21 || index==26 || index==34 || index==67 || index==80,
+            'text-primary' : index == 63
+          }" disabled class="text-capitalize property"></span>
+            <abbr title="{{prop.comment}}">
+              <i class="pull-right fa fa-info-circle" [ngClass]="{
+                'd-none' : index == 11 || index == 14 || index == 25 || index == 30 || index == 46 || index == 52 || index == 60 || index == 66 || index == 76
+              }" data-bs-toggle="modal" [attr.data-bs-target]="'#prop'+ index"></i>
+            </abbr>
+          </li>
+
+          <!-- Modal To Edit Property -->
+          <div *ngIf="isAdmin" class="modal fade modal-dialog modal-lg" id="prop{{index}}" tabindex="-1"
+            aria-labelledby="property" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <p class="fw-bold textmodal-title" id="property">Update {{prop.title}}</p>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <label class="fw-bold mt-2" for="title">Tilte</label>
+                    <input disabled #inputTitle class="form-control mb-4" name="title" type="text"
+                      value="{{prop.title}}">
+                    <label class="fw-bold" for="comment">Comment</label>
+                    <textarea #inputComment class="form-control mb-2" name="comment" type="text"
+                      value="{{prop.comment}}"></textarea>
+                    <button type="button" class="btn btn-secondary my-2" data-bs-dismiss="modal">Close</button>
+                    <button id="{{prop.id}}" type="button" class="btn btn-primary mx-2 my-2"
+                      (click)="updateProperty($event,inputTitle.value, inputComment.value)">Save</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Of Model -->
+
+        </div>
+      </div>
+    </ul>
+  </div>
+
+  <!-- Right Side Of Table And Results -->
+  <div class="col">
+    <div class="" style="border-right: 1px solid black;"><input [(ngModel)]="ArrayOfSearchInputs[0]"
+        (input)="inputOne.value=inputOne.value.toUpperCase()" type='text' input placeholder="Search With Symbol" id="0"
+        class="fw-bold text-center w-100" (blur)="getData($event, inputOne.value)"
+        (keyup.enter)="getData($event, inputOne.value)" #inputOne style="height:30px;background-color: #01ff8f;"><input
+        [(ngModel)]="ArrayOfSearchNames[0]" style="height:30px;background-color: #01ff8f;color: #1000ff;"
+        class="form-control text-center" type="text" disabled></div>
+    <ul class="rightElements fw-bold" [ngClass]="allStatus[0] ? 'success' : 'danger'" #inputOne *ngIf="isResponseBack">
+      <li *ngFor="let item of ArrayOfData[0]; let index = index" [ngClass]="{
+          'fw-bold': index == 0,
+          'd-none' : index==1 || index==19 || index == 43 || index == 44 || index == 45 || index == 41 || index == 9 || index == 10 ,
+          'fiveR' : index == 24,
+          'divYield' :  index == 47 || index == 74,
+          'blue' : index ==12 || index == 32 || index == 59 || index == 61 || index == 62 || index == 63 || index == 64 || index == 65 || index == 72 || index == 77,
+          'light-green' : index==13,
+          'green' : index ==21 || index==26 || index==34 || index==67 || index==80,
+          'higherThanOne  fw-bold': index == 9 && item > 0
+        }">
+        <span
+          [innerHTML]="index == 5 || index == 6 || index == 7 || index == 8 || index == 15 || index == 16 || index == 17 || index == 18 || index == 20 || index == 22 || index == 23 || index == 53 || index == 54 || index == 55 || index == 57 || index == 58? item?.toLocaleString() : item"
+          disabled [ngClass]="{
+          'maxValue': index == 84 && item == maxCashFromOperationsGrowthArr || index == 83 && item == maxTotalEquityGrowthArr || index == 24 && item == maxNetIncomeMargin || index==61 && item==maxRevenueGrowthLastYearArr||index==62 && item==maxFreeCashFlowMarginArr||index==63 && item==maxRuleOf50Arr||index==64 && item==maxJerryArr||index==65 && item==maxBvRatioArr||index==68 && item==maxRoaArr|| index==78 && item == maxGrossProfitGrowthArr || index ==69 && item == maxRoicArr ||index ==70 && item == maxRoceArr||index ==71 && item == maxRoteArr || index ==21 && item == maxRotceArr|| index ==59 && item == maxTAssetsVArr ||index ==72 && item == maxFiveRIndicatorArr || index ==26 && item == maxDeptToEquity ||index==79 && item == maxFreeCashFlowGrowthArr|| index==75 && item == maxPayoutRatio ||index==32 && item == maxRevenuePerShareRatio ||index==34 && item == maxEditdaPerShareRatio||index==59 && item == maxTAssetsArr || index==67 && item == maxRoeArr|| index==74 && item == maxDividendsYieldArr || index==80 && item == maxEditaGrowthArr || index==49 && item == maxTotalAssetsGrowthArr ||     index==82 && item == maxTotalAssetsGrowthArr || index==47 && item == maxRevenue10PeriodCagrArr || index==77 && item == maxNetIncomeGrowthArr || index==81 && item == maxOperationIncomeGrowthArr,
+          'minValue': index == 13 && item == minPsRatio || index==61 && item < 0 ||index==47 && item < 0 ||index==62 && item < 0||index==63 && item < 0||index==64 && item < 0||index==65 && item < 0||index==68 && item < 0|| index==78 && item == minGrossProfitGrowthArr || index ==69 && item < 0|| index ==59 && item < 0|| index ==74 && item < 0 || index ==70 && item < 0 || index ==21 && item < 0 || index ==24 && item < 0 ||index ==75 && item < 0||index ==71 && item < 0||index ==59 && item < 0 ||index==79 && item == minFreeCashFlowGrowthArr || index==49 && item == minTotalAssetsGrowthArr || index ==77 && item < 0 || index ==81 && item < 0 || index ==82 && item < 0 || index ==77 && item < 0,
+          'higherThanOne  fw-bold': index == 9 && item > 0,
+          'green' : index ==21 || index==26 || index==34 || index==67 || index==80,
+          'lessZeroOrHigherHundred' : index == 83 && item < 1 || index == 84 && item < 1 || index == 80 && item < 1 || index == 67 && item < 1 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 47 && item < 0 || index == 36 && item < 0 || index == 37 && item < 0 || index == 38 && item < 0 || index == 39 && item < 0 || index == 35 && item < 0 || index == 34 && item < 0 || index == 33 && item < 0 || index == 32 && item < 0 || index == 12 &&( item < 0 || item > 100) || index == 47 && item < 0 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 47 && item < 0 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 59 && item < 1 || index == 20 && item < 0 || index == 22 && item < 0 || index == 23 && item < 0 || index == 72 && item < 0 || index == 47 && item < 0 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 59 && item < 1 || index == 20 && item < 0 || index == 22 && item < 0 || index == 23 && item < 0 || index == 72 && item < 0
+        }"></span>
+      </li>
+    </ul>
+  </div>
+  <div class="col">
+    <div class="bg-dark" style="border-right: 1px solid black"><input [(ngModel)]="ArrayOfSearchInputs[1]"
+        (input)="inputTwo.value=inputTwo.value.toUpperCase()" type='text' input placeholder="Search With Symbol" id="1"
+        (keyup.enter)="getData($event, inputTwo.value)" (blur)="getData($event, inputTwo.value)" #inputTwo
+        class="fw-bold  text-center w-100" style="height:30px;background-color: #01ff8f;"><input
+        [(ngModel)]="ArrayOfSearchNames[1]" style="height:30px;background-color: #01ff8f;color: #1000ff;"
+        class=" form-control  text-center" type="text" disabled></div>
+    <ul class="rightElements fw-bold" [ngClass]="allStatus[1] ? 'success' : 'danger'" #inputOne *ngIf="isResponseBack">
+      <li *ngFor="let item of ArrayOfData[1]; let index = index" [ngClass]="{
+        'd-none' : index==1 || index==19 || index == 43 || index == 44 || index == 45 || index == 41 || index == 9 || index == 10 ,
+        'fiveR' : index == 24,
+        'divYield' :  index == 47 || index == 74,
+        'blue' : index ==12 || index == 32 || index == 59 || index == 61 || index == 62 || index == 63 || index == 64 || index == 65 || index == 72 || index == 77,
+        'light-green' : index==13,
+        'green' : index ==21 || index==26 || index==34 || index==67 || index==80,
+        'higherThanOne  fw-bold': index == 9 && item > 0
+      }">
+        <span
+          [innerHTML]="index == 5 || index == 6 || index == 7 || index == 8 || index == 15 || index == 16 || index == 17 || index == 18 || index == 20 || index == 22 || index == 23 || index == 53 || index == 54 || index == 55 || index == 57 || index == 58? item?.toLocaleString() : item"
+          disabled [ngClass]="{
+          'maxValue': index == 84 && item == maxCashFromOperationsGrowthArr || index == 83 && item == maxTotalEquityGrowthArr || index == 24 && item == maxNetIncomeMargin || index==61 && item==maxRevenueGrowthLastYearArr||index==62 && item==maxFreeCashFlowMarginArr||index==63 && item==maxRuleOf50Arr||index==64 && item==maxJerryArr||index==65 && item==maxBvRatioArr||index==68 && item==maxRoaArr|| index==78 && item == maxGrossProfitGrowthArr || index ==69 && item == maxRoicArr ||index ==70 && item == maxRoceArr||index ==71 && item == maxRoteArr || index ==21 && item == maxRotceArr|| index ==59 && item == maxTAssetsVArr ||index ==72 && item == maxFiveRIndicatorArr || index ==26 && item == maxDeptToEquity ||index==79 && item == maxFreeCashFlowGrowthArr|| index==75 && item == maxPayoutRatio ||index==32 && item == maxRevenuePerShareRatio ||index==34 && item == maxEditdaPerShareRatio||index==59 && item == maxTAssetsArr || index==67 && item == maxRoeArr|| index==74 && item == maxDividendsYieldArr || index==80 && item == maxEditaGrowthArr || index==49 && item == maxTotalAssetsGrowthArr ||     index==82 && item == maxTotalAssetsGrowthArr || index==47 && item == maxRevenue10PeriodCagrArr || index==77 && item == maxNetIncomeGrowthArr || index==81 && item == maxOperationIncomeGrowthArr,
+          'minValue': index == 13 && item == minPsRatio || index==61 && item < 0 ||index==47 && item < 0 ||index==62 && item < 0||index==63 && item < 0||index==64 && item < 0||index==65 && item < 0||index==68 && item < 0|| index==78 && item == minGrossProfitGrowthArr || index ==69 && item < 0|| index ==59 && item < 0|| index ==74 && item < 0 || index ==70 && item < 0 || index ==21 && item < 0 || index ==24 && item < 0 ||index ==75 && item < 0||index ==71 && item < 0||index ==59 && item < 0 ||index==79 && item == minFreeCashFlowGrowthArr || index==49 && item == minTotalAssetsGrowthArr || index ==77 && item < 0 || index ==81 && item < 0 || index ==82 && item < 0 || index ==77 && item < 0,
+          'higherThanOne  fw-bold': index == 9 && item > 0,
+          'green' : index ==21 || index==26 || index==34 || index==67 || index==80,
+          'lessZeroOrHigherHundred' : index == 83 && item < 1 || index == 84 && item < 1 || index == 80 && item < 1 || index == 67 && item < 1 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 47 && item < 0 || index == 36 && item < 0 || index == 37 && item < 0 || index == 38 && item < 0 || index == 39 && item < 0 || index == 35 && item < 0 || index == 34 && item < 0 || index == 33 && item < 0 || index == 32 && item < 0 || index == 12 &&( item < 0 || item > 100) || index == 47 && item < 0 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 47 && item < 0 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 59 && item < 1 || index == 20 && item < 0 || index == 22 && item < 0 || index == 23 && item < 0 || index == 72 && item < 0
+        }"></span>
+      </li>
+    </ul>
+  </div>
+  <div class="col">
+    <div class="" style="border-right: 1px solid black"><input [(ngModel)]="ArrayOfSearchInputs[2]"
+        (input)="inputThree.value=inputThree.value.toUpperCase()" type='text' input placeholder="Search With Symbol"
+        id="2" class="fw-bold  text-center w-100" (keyup.enter)="getData($event, inputThree.value)"
+        (blur)="getData($event, inputThree.value)" #inputThree style="height:30px;background-color: #01ff8f;"><input
+        [(ngModel)]="ArrayOfSearchNames[2]" style="height:30px;background-color: #01ff8f;color: #1000ff;"
+        class=" form-control  text-center" type="text" disabled></div>
+    <ul class="rightElements fw-bold" [ngClass]="allStatus[2] ? 'success' : 'danger'" #inputOne *ngIf="isResponseBack">
+      <li *ngFor="let item of ArrayOfData[2]; let index = index" [ngClass]="{
+        'd-none' : index==1 || index==19 || index == 43 || index == 44 || index == 45 || index == 41 || index == 9 || index == 10 ,
+        'fiveR' : index == 24,
+        'divYield' :  index == 47 || index == 74,
+        'blue' : index ==12 || index == 32 || index == 59 || index == 61 || index == 62 || index == 63 || index == 64 || index == 65 || index == 72 || index == 77,
+        'light-green' : index==13,
+        'green' : index ==21 || index==26 || index==34 || index==67 || index==80,
+        'higherThanOne  fw-bold': index == 9 && item > 0
+      }">
+        <span
+          [innerHTML]="index == 5 || index == 6 || index == 7 || index == 8 || index == 15 || index == 16 || index == 17 || index == 18 || index == 20 || index == 22 || index == 23 || index == 53 || index == 54 || index == 55 || index == 57 || index == 58? item?.toLocaleString() : item"
+          disabled [ngClass]="{
+          'maxValue': index == 84 && item == maxCashFromOperationsGrowthArr || index == 83 && item == maxTotalEquityGrowthArr || index == 24 && item == maxNetIncomeMargin || index==61 && item==maxRevenueGrowthLastYearArr||index==62 && item==maxFreeCashFlowMarginArr||index==63 && item==maxRuleOf50Arr||index==64 && item==maxJerryArr||index==65 && item==maxBvRatioArr||index==68 && item==maxRoaArr|| index==78 && item == maxGrossProfitGrowthArr || index ==69 && item == maxRoicArr ||index ==70 && item == maxRoceArr||index ==71 && item == maxRoteArr || index ==21 && item == maxRotceArr|| index ==59 && item == maxTAssetsVArr ||index ==72 && item == maxFiveRIndicatorArr || index ==26 && item == maxDeptToEquity ||index==79 && item == maxFreeCashFlowGrowthArr|| index==75 && item == maxPayoutRatio ||index==32 && item == maxRevenuePerShareRatio ||index==34 && item == maxEditdaPerShareRatio||index==59 && item == maxTAssetsArr || index==67 && item == maxRoeArr|| index==74 && item == maxDividendsYieldArr || index==80 && item == maxEditaGrowthArr || index==49 && item == maxTotalAssetsGrowthArr ||     index==82 && item == maxTotalAssetsGrowthArr || index==47 && item == maxRevenue10PeriodCagrArr || index==77 && item == maxNetIncomeGrowthArr || index==81 && item == maxOperationIncomeGrowthArr,
+          'minValue': index == 13 && item == minPsRatio || index==61 && item < 0 ||index==47 && item < 0 ||index==62 && item < 0||index==63 && item < 0||index==64 && item < 0||index==65 && item < 0||index==68 && item < 0|| index==78 && item == minGrossProfitGrowthArr || index ==69 && item < 0|| index ==59 && item < 0|| index ==74 && item < 0 || index ==70 && item < 0 || index ==21 && item < 0 || index ==24 && item < 0 ||index ==75 && item < 0||index ==71 && item < 0||index ==59 && item < 0 ||index==79 && item == minFreeCashFlowGrowthArr || index==49 && item == minTotalAssetsGrowthArr || index ==77 && item < 0 || index ==81 && item < 0 || index ==82 && item < 0 || index ==77 && item < 0,
+          'higherThanOne  fw-bold': index == 9 && item > 0,
+          'green' : index ==21 || index==26 || index==34 || index==67 || index==80,
+          'lessZeroOrHigherHundred' : index == 83 && item < 1 || index == 84 && item < 1 || index == 80 && item < 1 || index == 67 && item < 1 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 47 && item < 0 || index == 36 && item < 0 || index == 37 && item < 0 || index == 38 && item < 0 || index == 39 && item < 0 || index == 35 && item < 0 || index == 34 && item < 0 || index == 33 && item < 0 || index == 32 && item < 0 || index == 12 &&( item < 0 || item > 100) || index == 47 && item < 0 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 47 && item < 0 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 59 && item < 1 || index == 20 && item < 0 || index == 22 && item < 0 || index == 23 && item < 0 || index == 72 && item < 0
+        }"></span>
+      </li>
+    </ul>
+  </div>
+  <div class="col">
+    <div class="" style="border-right: 1px solid black"><input [(ngModel)]="ArrayOfSearchInputs[3]"
+        (input)="inputFour.value=inputFour.value.toUpperCase()" type='text' input placeholder="Search With Symbol"
+        id="3" class="fw-bold  text-center w-100" (keyup.enter)="getData($event, inputFour.value)"
+        (blur)="getData($event, inputFour.value)" #inputFour style="height:30px;background-color: #01ff8f;"><input
+        [(ngModel)]="ArrayOfSearchNames[3]" style="height:30px;background-color: #01ff8f;color: #1000ff;"
+        class=" form-control  text-center" type="text" disabled></div>
+    <ul class="rightElements fw-bold" [ngClass]="allStatus[3] ? 'success' : 'danger'" #inputOne *ngIf="isResponseBack">
+      <li *ngFor="let item of ArrayOfData[3]; let index = index" [ngClass]="{
+        'd-none' : index==1 || index==19 || index == 43 || index == 44 || index == 45 || index == 41 || index == 9 || index == 10 ,
+        'fiveR' : index == 24,
+        'divYield' :  index == 47 || index == 74,
+        'blue' : index ==12 || index == 32 || index == 59 || index == 61 || index == 62 || index == 63 || index == 64 || index == 65 || index == 72 || index == 77,
+        'light-green' : index==13,
+        'green' : index ==21 || index==26 || index==34 || index==67 || index==80,
+        'higherThanOne  fw-bold': index == 9 && item > 0
+      }">
+        <span
+          [innerHTML]="index == 5 || index == 6 || index == 7 || index == 8 || index == 15 || index == 16 || index == 17 || index == 18 || index == 20 || index == 22 || index == 23 || index == 53 || index == 54 || index == 55 || index == 57 || index == 58? item?.toLocaleString() : item"
+          disabled [ngClass]="{
+          'maxValue': index == 84 && item == maxCashFromOperationsGrowthArr || index == 83 && item == maxTotalEquityGrowthArr || index == 24 && item == maxNetIncomeMargin || index==61 && item==maxRevenueGrowthLastYearArr||index==62 && item==maxFreeCashFlowMarginArr||index==63 && item==maxRuleOf50Arr||index==64 && item==maxJerryArr||index==65 && item==maxBvRatioArr||index==68 && item==maxRoaArr|| index==78 && item == maxGrossProfitGrowthArr || index ==69 && item == maxRoicArr ||index ==70 && item == maxRoceArr||index ==71 && item == maxRoteArr || index ==21 && item == maxRotceArr|| index ==59 && item == maxTAssetsVArr ||index ==72 && item == maxFiveRIndicatorArr || index ==26 && item == maxDeptToEquity ||index==79 && item == maxFreeCashFlowGrowthArr|| index==75 && item == maxPayoutRatio ||index==32 && item == maxRevenuePerShareRatio ||index==34 && item == maxEditdaPerShareRatio||index==59 && item == maxTAssetsArr || index==67 && item == maxRoeArr|| index==74 && item == maxDividendsYieldArr || index==80 && item == maxEditaGrowthArr || index==49 && item == maxTotalAssetsGrowthArr ||     index==82 && item == maxTotalAssetsGrowthArr || index==47 && item == maxRevenue10PeriodCagrArr || index==77 && item == maxNetIncomeGrowthArr || index==81 && item == maxOperationIncomeGrowthArr,
+          'minValue': index == 13 && item == minPsRatio || index==61 && item < 0 ||index==47 && item < 0 ||index==62 && item < 0||index==63 && item < 0||index==64 && item < 0||index==65 && item < 0||index==68 && item < 0|| index==78 && item == minGrossProfitGrowthArr || index ==69 && item < 0|| index ==59 && item < 0|| index ==74 && item < 0 || index ==70 && item < 0 || index ==21 && item < 0 || index ==24 && item < 0 ||index ==75 && item < 0||index ==71 && item < 0||index ==59 && item < 0 ||index==79 && item == minFreeCashFlowGrowthArr || index==49 && item == minTotalAssetsGrowthArr || index ==77 && item < 0 || index ==81 && item < 0 || index ==82 && item < 0 || index ==77 && item < 0,
+          'higherThanOne  fw-bold': index == 9 && item > 0,
+          'green' : index ==21 || index==26 || index==34 || index==67 || index==80,
+          'lessZeroOrHigherHundred' : index == 83 && item < 1 || index == 84 && item < 1 || index == 80 && item < 1 || index == 67 && item < 1 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 47 && item < 0 || index == 36 && item < 0 || index == 37 && item < 0 || index == 38 && item < 0 || index == 39 && item < 0 || index == 35 && item < 0 || index == 34 && item < 0 || index == 33 && item < 0 || index == 32 && item < 0 || index == 12 &&( item < 0 || item > 100) || index == 47 && item < 0 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 47 && item < 0 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 59 && item < 1 || index == 20 && item < 0 || index == 22 && item < 0 || index == 23 && item < 0 || index == 72 && item < 0
+        }"></span>
+      </li>
+    </ul>
+  </div>
+  <div class="col">
+    <div class="" style="border-right: 1px solid black"><input [(ngModel)]="ArrayOfSearchInputs[4]"
+        (input)="inputFive.value=inputFive.value.toUpperCase()" type='text' input placeholder="Search With Symbol"
+        id="4" class="fw-bold text-center w-100" (keyup.enter)="getData($event, inputFive.value)"
+        (blur)="getData($event, inputFive.value)" #inputFive style="height:30px;background-color: #01ff8f;"><input
+        [(ngModel)]="ArrayOfSearchNames[4]" style="height:30px;background-color: #01ff8f;color: #1000ff;"
+        class=" form-control  text-center" type="text" disabled></div>
+    <ul class="rightElements fw-bold" [ngClass]="allStatus[4] ? 'success' : 'danger'" #inputOne *ngIf="isResponseBack">
+      <li *ngFor="let item of ArrayOfData[4]; let index = index" [ngClass]="{
+        'd-none' : index==1 || index==19 || index == 43 || index == 44 || index == 45 || index == 41 || index == 9 || index == 10 ,
+        'fiveR' : index == 24,
+        'divYield' :  index == 47 || index == 74,
+        'blue' : index ==12 || index == 32 || index == 59 || index == 61 || index == 62 || index == 63 || index == 64 || index == 65 || index == 72 || index == 77,
+        'light-green' : index==13,
+        'green' : index ==21 || index==26 || index==34 || index==67 || index==80,
+        'higherThanOne  fw-bold': index == 9 && item > 0
+      }">
+        <span
+          [innerHTML]="index == 5 || index == 6 || index == 7 || index == 8 || index == 15 || index == 16 || index == 17 || index == 18 || index == 20 || index == 22 || index == 23 || index == 53 || index == 54 || index == 55 || index == 57 || index == 58? item?.toLocaleString() : item"
+          disabled [ngClass]="{
+          'maxValue': index == 84 && item == maxCashFromOperationsGrowthArr || index == 83 && item == maxTotalEquityGrowthArr || index == 24 && item == maxNetIncomeMargin || index==61 && item==maxRevenueGrowthLastYearArr||index==62 && item==maxFreeCashFlowMarginArr||index==63 && item==maxRuleOf50Arr||index==64 && item==maxJerryArr||index==65 && item==maxBvRatioArr||index==68 && item==maxRoaArr|| index==78 && item == maxGrossProfitGrowthArr || index ==69 && item == maxRoicArr ||index ==70 && item == maxRoceArr||index ==71 && item == maxRoteArr || index ==21 && item == maxRotceArr|| index ==59 && item == maxTAssetsVArr ||index ==72 && item == maxFiveRIndicatorArr || index ==26 && item == maxDeptToEquity ||index==79 && item == maxFreeCashFlowGrowthArr|| index==75 && item == maxPayoutRatio ||index==32 && item == maxRevenuePerShareRatio ||index==34 && item == maxEditdaPerShareRatio||index==59 && item == maxTAssetsArr || index==67 && item == maxRoeArr|| index==74 && item == maxDividendsYieldArr || index==80 && item == maxEditaGrowthArr || index==49 && item == maxTotalAssetsGrowthArr ||     index==82 && item == maxTotalAssetsGrowthArr || index==47 && item == maxRevenue10PeriodCagrArr || index==77 && item == maxNetIncomeGrowthArr || index==81 && item == maxOperationIncomeGrowthArr ,
+          'minValue': index == 13 && item == minPsRatio || index==61 && item < 0 ||index==62 && item < 0||index==63 && item < 0||index==64 && item < 0||index==65 && item < 0||index==68 && item < 0|| index==78 && item == minGrossProfitGrowthArr || index ==69 && item < 0|| index ==59 && item < 0|| index ==74 && item < 0 || index ==70 && item < 0 || index ==21 && item < 0 || index ==24 && item < 0 ||index ==75 && item < 0||index ==71 && item < 0||index ==59 && item < 0 ||index==79 && item == minFreeCashFlowGrowthArr || index==49 && item == minTotalAssetsGrowthArr || index ==77 && item < 0 || index ==81 && item < 0 || index ==82 && item < 0 || index ==77 && item < 0,
+          'higherThanOne  fw-bold': index == 9 && item > 0,
+          'green' : index ==21 || index==26 || index==34 || index==67 || index==80,
+          'lessZeroOrHigherHundred' : index == 83 && item < 1 || index == 84 && item < 1 || index == 80 && item < 1 || index == 67 && item < 1 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 47 && item < 0 || index == 36 && item < 0 || index == 37 && item < 0 || index == 38 && item < 0 || index == 39 && item < 0 || index == 35 && item < 0 || index == 34 && item < 0 || index == 33 && item < 0 || index == 32 && item < 0 || index == 12 &&( item < 0 || item > 100) || index == 47 && item < 0 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 47 && item < 0 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 59 && item < 1 || index == 20 && item < 0 || index == 22 && item < 0 || index == 23 && item < 0 || index == 72 && item < 0
+        }"></span>
+      </li>
+    </ul>
+  </div>
+  <div class="col">
+    <div class="" style="border-right: 1px solid black;"><input [(ngModel)]="ArrayOfSearchInputs[5]"
+        (input)="inputSix.value=inputSix.value.toUpperCase()" type='text' input placeholder="Search With Symbol" id="5"
+        class="fw-bold text-center w-100 form-control" (keyup.enter)="getData($event, inputSix.value)"
+        (blur)="getData($event, inputSix.value)" #inputSix style="height:30px;background-color: #01ff8f;"><input
+        [(ngModel)]="ArrayOfSearchNames[5]" style="height:30px;background-color: #01ff8f;color: #1000ff"
+        class=" form-control  text-center" type="text" disabled></div>
+    <ul class="rightElements fw-bold" [ngClass]="allStatus[5] ? 'success' : 'danger'" #inputOne *ngIf="isResponseBack">
+      <li *ngFor="let item of ArrayOfData[5]; let index = index" [ngClass]="{
+        'd-none' : index==1 || index==19 || index == 43 || index == 44 || index == 45 || index == 41 || index == 9 || index == 10 ,
+        'fiveR' : index == 24,
+        'divYield' :  index == 47 || index == 74,
+        'blue' : index ==12 || index == 32 || index == 59 || index == 61 || index == 62 || index == 63 || index == 64 || index == 65 || index == 72 || index == 77,
+        'light-green' : index==13,
+        'green' : index ==21 || index==26 || index==34 || index==67 || index==80,
+        'higherThanOne  fw-bold': index == 9 && item > 0
+      }">
+        <span
+          [innerHTML]="index == 5 || index == 6 || index == 7 || index == 8 || index == 15 || index == 16 || index == 17 || index == 18 || index == 20 || index == 22 || index == 23 || index == 53 || index == 54 || index == 55 || index == 57 || index == 58? item?.toLocaleString() : item"
+          disabled [ngClass]="{
+          'maxValue': index == 84 && item == maxCashFromOperationsGrowthArr || index == 83 && item == maxTotalEquityGrowthArr || index == 24 && item == maxNetIncomeMargin || index==61 && item==maxRevenueGrowthLastYearArr||index==62 && item==maxFreeCashFlowMarginArr||index==63 && item==maxRuleOf50Arr||index==64 && item==maxJerryArr||index==65 && item==maxBvRatioArr||index==68 && item==maxRoaArr|| index==78 && item == maxGrossProfitGrowthArr || index ==69 && item == maxRoicArr ||index ==70 && item == maxRoceArr||index ==71 && item == maxRoteArr || index ==21 && item == maxRotceArr|| index ==59 && item == maxTAssetsVArr ||index ==72 && item == maxFiveRIndicatorArr || index ==26 && item == maxDeptToEquity ||index==79 && item == maxFreeCashFlowGrowthArr|| index==75 && item == maxPayoutRatio ||index==32 && item == maxRevenuePerShareRatio ||index==34 && item == maxEditdaPerShareRatio||index==59 && item == maxTAssetsArr || index==67 && item == maxRoeArr|| index==74 && item == maxDividendsYieldArr || index==80 && item == maxEditaGrowthArr || index==49 && item == maxTotalAssetsGrowthArr ||     index==82 && item == maxTotalAssetsGrowthArr || index==47 && item == maxRevenue10PeriodCagrArr || index==77 && item == maxNetIncomeGrowthArr || index==81 && item == maxOperationIncomeGrowthArr,
+          'minValue': index == 13 && item == minPsRatio || index==61 && item < 0 ||index==62 && item < 0||index==63 && item < 0||index==64 && item < 0||index==65 && item < 0||index==68 && item < 0|| index==78 && item == minGrossProfitGrowthArr || index ==69 && item < 0|| index ==59 && item < 0|| index ==74 && item < 0 || index ==70 && item < 0 || index ==21 && item < 0 || index ==24 && item < 0 ||index ==75 && item < 0||index ==71 && item < 0||index ==59 && item < 0 ||index==79 && item == minFreeCashFlowGrowthArr || index==49 && item == minTotalAssetsGrowthArr || index ==77 && item < 0 || index ==81 && item < 0 || index ==82 && item < 0 || index ==77 && item < 0,
+          'higherThanOne  fw-bold': index == 9 && item > 0,
+          'green' : index ==21 || index==26 || index==34 || index==67 || index==80,
+          'lessZeroOrHigherHundred' : index == 83 && item < 1 || index == 84 && item < 1 || index == 80 && item < 1 || index == 67 && item < 1 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 47 && item < 0 || index == 36 && item < 0 || index == 37 && item < 0 || index == 38 && item < 0 || index == 39 && item < 0 || index == 35 && item < 0 || index == 34 && item < 0 || index == 33 && item < 0 || index == 32 && item < 0 || index == 12 &&( item < 0 || item > 100) || index == 47 && item < 0 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 47 && item < 0 || index == 48 && item < 0 || index == 49 && item < 0 || index == 50 && item < 0 || index == 51 && item < 0 || index == 59 && item < 1 || index == 20 && item < 0 || index == 22 && item < 0 || index == 23 && item < 0 || index == 72 && item < 0
+        }"></span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Start Of Draw Footer -->
+</div>
+<div class="footer" *ngIf="isPropertiesLoaded">
+  <div class="fiveR p-4 text-center">
+    <p class="h2">Notes</p>
+  </div>
+  <app-editor></app-editor>
+  <div class='bg-warning' style='font-size:14px'>Disclaimer: This content is for informational purposes only. You should
+    not construe any such information or other material as legal, tax, investment, financial, or other advice.</div>
+  <div class='bg-dark text-center'><img src="/assets/images/1.png" width="80px" height="30px">
+    <span class=' text-light m-5'>Free Tools at https://jerryromine.com/.com</span>
+    <img src="/assets/images/1.png" width="80px" height="30px">
+  </div>
+</div>

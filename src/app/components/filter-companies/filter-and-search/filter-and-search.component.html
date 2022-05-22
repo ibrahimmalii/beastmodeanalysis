@@ -1,0 +1,361 @@
+<section class="search">
+  <!-- alert for error update -->
+  <div
+    *ngIf="isLoginError"
+    class="alert alert-primary alert-dismissible fade show"
+    role="alert"
+  >
+    <div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="currentColor"
+        class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+        viewBox="0 0 16 16"
+        role="img"
+        aria-label="Warning:"
+      >
+        <path
+          d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+        />
+      </svg>
+      Uh oh. We could not find that stock <i class="fa fa-arrow-right"></i> [{{
+        searchKey.value
+      }}] (we do not have ETFs, Indexes, or FUNDS).
+      <button
+        type="button"
+        (click)="hide()"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+      <button
+        type="button"
+        (click)="hide()"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
+
+  <p class="h1 text-center mt-3 noPrint">Beast Mode</p>
+
+  <div class="container d-flex noPrint">
+    <div class="mx-2">
+      <img
+        *ngIf="searchKey.value.length != 0"
+        src="https://storage.googleapis.com/iex/api/logos/{{
+          searchKey.value.includes(':')
+            ? searchKey.value.substring(0, searchKey.value.lastIndexOf(':'))
+            : searchKey.value
+        }}.png"
+        style="width: 50px; height: 50px"
+        alt="No image"
+      />
+    </div>
+    <div class="flex-grow-1 noPrint">
+      <input
+        #searchKey
+        (input)="
+          getSearchValue($event, searchKey.value);
+          searchKey.value = searchKey.value.toUpperCase();
+          hide()
+        "
+        (keyup.enter)="getData($event, searchKey.value)"
+        placeholder="Search By Company Or Symbol. Examples: MSFT:US, SHOP:CA, BP:LN, BXB:AU, WBC:NZ, OR BIMBOA:MM"
+        list="smallcompany"
+        name="company"
+        class="form-control w-100 m-auto"
+      />
+    </div>
+    <div class="noPrint">
+      <button class="btn btn-danger" (click)="resetPage()">Reset</button>
+    </div>
+  </div>
+  <div *ngIf="isPageLoaded">
+    <datalist id="smallcompany" style="height: 200px">
+      <option
+        class="form-control"
+        *ngFor="let symbol of symbols.data; let i = index"
+        value="{{ symbol.symbols }}"
+        (mouseup)="getData($event, searchKey.value)"
+      >
+        {{ symbol.Name }}
+      </option>
+    </datalist>
+  </div>
+
+  <div class="container noPrint">
+    <div class="content text-center my-5">
+      <p class="h3">
+        To find a stock type the company name(ex. Microsoft) then select it from
+        the drop down menu. Next, COPY AND PASTE the stock symbol (ex. MSFT:US)
+        into the SIDE BY SIDE analysis page.
+      </p>
+    </div>
+  </div>
+
+  <div class="loader container text-center" *ngIf="loaderStarted">
+    <p>Please give us 30 seconds, we have over 30k stocks! :)</p>
+    <img src="/assets/images/loading.gif" />
+  </div>
+</section>
+
+<div class="mainwrapper" *ngIf="isResponseGet">
+  <section class="best-mode">
+    <div class="div1 text-center p-3 noPrint">
+      <img src="/assets/images/1.png" />
+    </div>
+
+    <article class="art1">
+      <p class="">Last Close: {{ price | currency }}</p>
+      <p>Market Cap: {{ marketCap | currency }}M</p>
+      <p>EV: {{ ev | currency }}M</p>
+      <p>Industry: {{ industry }}</p>
+      <p>Display Currency: USD</p>
+    </article>
+
+    <!--section2-->
+    <section class="sec2 d-flex flex-wrap">
+      <article class="col-lg-4 col-11">
+        <div class="">
+          <h3 class="beastMode">Beast Mode Scorecard</h3>
+          <img src="/assets/images/1.png" width="120px" height="40px" />
+        </div>
+        <div class="">
+          <h4 class="antero">{{ name }}</h4>
+          <h5>{{ qfs_symbol }}</h5>
+        </div>
+        <div class="">
+          <h4>Last Close</h4>
+          <h5 class="price text-light">${{ price }}</h5>
+        </div>
+        <h4>STOCK PERFORMANCE</h4>
+        <div class="pe">
+          <h5>PE Ratio <i class="fa fa-arrow-down"></i></h5>
+          <h5>{{ PE }}</h5>
+        </div>
+        <div class="">
+          <h5>PS Ratio <i class="fa fa-arrow-down"></i> <2 ldeal <1 Great</h5>
+          <h5 class="text-light">{{ PS }}</h5>
+        </div>
+        <h4>INCOME & OPERATIONS</h4>
+        <div class="">
+          <h5>Operating Margin <i class="fa fa-arrow-up"></i></h5>
+          <h5 class="text-light">{{ operatingMargin }}%</h5>
+        </div>
+        <div class="">
+          <h5 class="newIncome">
+            Net Income Margin (FY) <i class="fa fa-arrow-up"></i>
+          </h5>
+          <h5>{{ netIncomeMarginDone }}%</h5>
+        </div>
+        <div class="">
+          <h5>
+            T Assets v. T Liabilities TATL Ratio <i class="fa fa-arrow-up"></i>
+          </h5>
+          <h5 class="text-light">{{ total }}</h5>
+        </div>
+        <div class="">
+          <h5>Revenue Growth Last Year <i class="fa fa-arrow-up"></i></h5>
+          <h5 class="text-light">{{ revenue_growthDone }}%</h5>
+        </div>
+        <h4>MANAGEMENT EFFECTIVENESS</h4>
+        <div class="">
+          <h5 class="newIncome">
+            ROE-Return On Equity (Yr) <i class="fa fa-arrow-up"></i>
+          </h5>
+          <h5>{{ roeOne }}%</h5>
+        </div>
+        <div class="">
+          <h5>
+            ROCE-Return On Capital Employed <i class="fa fa-arrow-up"></i>
+          </h5>
+          <h5 class="text-light">{{ roceOne }}%</h5>
+        </div>
+        <h4>KEY METRICS</h4>
+        <div class="">
+          <h5 class="newIncome">
+            Free Cash Flow Margin <i class="fa fa-arrow-up"></i>
+          </h5>
+          <h5 class="">{{ flowPerShareDone }}%</h5>
+        </div>
+        <div class="">
+          <h5 class="newIncome">
+            Rule of 40 Indicator<i class="fa fa-arrow-up"></i>
+          </h5>
+          <h5>{{ ruleOf40Done }}%</h5>
+        </div>
+        <div>
+          <h5>Jerry's FNR Indicator <i class="fa fa-arrow-up"></i></h5>
+          <h5 class="text-light">{{ jerryDone }}%</h5>
+        </div>
+        <div class="text-light">
+          <h5 ckass="">BV Ratio (1=@par) <i class="fa fa-arrow-up"></i></h5>
+          <h5 class="text-light">{{ bvRatio }}</h5>
+        </div>
+        <div class="">
+          <h5 class="text-light">
+            Revenue Per Share Ratio <i class="fa fa-arrow-up"></i>
+          </h5>
+          <h5 class="text-light">{{ revenuePerShareRatio.toFixed(2) }}</h5>
+        </div>
+        <div class="">
+          <h5>EBITDA Per Share Ratio <i class="fa fa-arrow-up"></i></h5>
+          <h5 class="text-light">{{ ebidtaPerShareRatio.toFixed(2) }}</h5>
+        </div>
+
+        <div class="">
+          <h5>Dividend Yield <i class="fa fa-arrow-up"></i> 4%</h5>
+          <h5 class="text-light">{{ dividend_yield }}%</h5>
+        </div>
+        <div class="">
+          <h5>Debt to Equity <i class="fa fa-arrow-down"></i> Ratio</h5>
+          <h5 class="text-light">{{ deptToEquity.toFixed(2) }}</h5>
+        </div>
+        <div class="text-center">
+          <h4 class="btn btn-link ml-0 px-0 h4" style="color: rgb(0, 132, 255)">
+            BeastModeAnalysis.com
+          </h4>
+        </div>
+      </article>
+      <article class="col-lg-7 col-md-11 marginAtPrint">
+        <div class="d-flex">
+          <div class="title">
+            <h3 style="color: darkblue d-inline">
+              <img
+                src="https://storage.googleapis.com/iex/api/logos/{{
+                  symbol
+                }}.png"
+                style="width: 60px; height: 60px"
+                onerror="this.src='/assets/images/placeholder.png';"
+              />
+              Business Description:
+            </h3>
+          </div>
+          <div class="py-1 noPrint">
+            <button class="btn btn-secondary pull-right" (click)="print()">
+              Print
+            </button>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="mx-2"></div>
+          <span class="h4 text-black desc">
+            {{ data.description | shorten: 900:"........" }}</span
+          >
+        </div>
+
+        <!----------------------------------secctions of charts--------------------------------------->
+        <!-- First Chart -->
+        <div class="container my-5 text-center">
+          <div class="chart w-100">
+            <div [chart]="charttwo" class="mainChart"></div>
+          </div>
+        </div>
+      </article>
+      <!-- <article>
+    </article> -->
+    </section>
+  </section>
+
+  <!-- <div class="container my-5 text-center">
+    <div class="chart w-100">
+      <div [chart]="chart" class='mainChart'></div>
+    </div>
+  </div> -->
+
+  <!----------------------------------secction of table two--------------------------------------->
+  <section class="two">
+    <table class="table table-striped table-responsive my-5">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">2012</th>
+          <th scope="col">2013</th>
+          <th scope="col">2014</th>
+          <th scope="col">2015</th>
+          <th scope="col">2016</th>
+          <th scope="col">2017</th>
+          <th scope="col">2018</th>
+          <th scope="col">2019</th>
+          <th scope="col">2020</th>
+          <th scope="col">2021</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Revenue</th>
+          <!-- <td *ngFor="let rev of revenue">{{(rev / 1000000).toLocaleString(undefined,{ minimumFractionDigits: 0 })}}</td> -->
+          <td *ngFor="let rev of revenue">
+            {{ (rev / 1000000).toFixed(0).toLocaleString() }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Revenue Growth</th>
+          <td *ngFor="let rev of revenue_growthCopy">
+            {{ (rev * 100).toFixed(1) }}%
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Gross Profit</th>
+          <td *ngFor="let gross of gross_profit">
+            {{ (gross / 1000000).toFixed(0).toLocaleString() }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Gross Margin %</th>
+          <td *ngFor="let gross of gross_margin">
+            {{ (gross * 100).toFixed(1) }}%
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Operating Profit</th>
+          <td *ngFor="let operating of operating_income">
+            {{ (operating / 1000000).toFixed(0).toLocaleString() }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Operating Margin %</th>
+          <td *ngFor="let operating of operating_margin">
+            {{ (operating * 100).toFixed(1) }}%
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Earnings Per Share</th>
+          <td *ngFor="let eps of eps_diluted">${{ eps }}</td>
+        </tr>
+        <tr>
+          <th scope="row">EPS Growth</th>
+          <td *ngFor="let eps of eps_diluted_growth">
+            {{ (eps * 100).toFixed(1) }}%
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Dividends Per Share</th>
+          <td *ngFor="let div of dividends">${{ div }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Dividends Growth</th>
+          <td *ngFor="let div of dividends_per_share_growth">
+            {{ (div * 100).toFixed(1) }}%
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Return On Assets</th>
+          <td *ngFor="let item of roa">{{ (item * 100).toFixed(1) }}%</td>
+        </tr>
+        <tr>
+          <th scope="row">Return On Equity</th>
+          <td *ngFor="let item of roe">{{ (item * 100).toFixed(1) }}%</td>
+        </tr>
+        <tr>
+          <th scope="row">Return On Invested Capital</th>
+          <td *ngFor="let item of roic">{{ (item * 100).toFixed(1) }}%</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>

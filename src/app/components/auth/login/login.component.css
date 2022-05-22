@@ -1,0 +1,45 @@
+form{
+  border: 1px solid var(--fc);
+  border-radius: 8px;
+}
+
+input +button{
+  display: block;
+  background-color: var(--bg);
+}
+
+input[type="button"]{
+  background-color: var(--bg)
+}
+
+button, input[type="button"]{
+  border: 1px solid rgb(241, 172, 172);
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+button:hover{
+  background-color: var(--bg);
+}
+
+.form-control{
+  padding : 10px
+}
+
+a{
+  color: var(--tc);
+  text-decoration: none;
+}
+
+a:hover{
+  text-decoration: underline;
+  color: rgb(17, 13, 226);
+}
+
+.main{
+  margin: 100px auto;
+}
+
+.fade{
+  margin-top: 90px;
+}

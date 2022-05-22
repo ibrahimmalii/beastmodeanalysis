@@ -1,0 +1,20 @@
+RewriteEngine On
+RewriteBase /
+RewriteRule login index.html
+RewriteRule register index.html
+RewriteRule auth login
+RewriteRule pricing index.html
+RewriteRule me index.html
+RewriteRule filter index.html
+RewriteRule filter-company index.html
+
+
+
+
+# If an existing asset or directory is requested go to it as it is
+#RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+#RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+#RewriteRule ^ - [L]
+
+# If the requested resource doesn't exist, use index.html
+#RewriteRule ^ /index.html

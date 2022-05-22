@@ -1,0 +1,26 @@
+user agent stylesheet
+div {
+    display: block;
+    color: var(--mc);
+}
+.footer-dark {
+    color: #a0aec0;
+    background-color: var(--mc);
+}
+.footer-div{
+    padding: 50px;
+    background-color: var(--mc);
+}
+a{
+    text-decoration: none;
+    color: #718096;
+}
+a:hover{
+    color: var(--bg);
+}
+
+
+footer{
+ margin-top: 1%;
+}
+

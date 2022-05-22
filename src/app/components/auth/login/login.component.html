@@ -1,0 +1,142 @@
+<div class="container main">
+  <!-- alert for update data successfully -->
+  <div *ngIf="isLoginSuccess" class="alert alert-info alert-dismissible fade show" role="alert">
+    <strong>Awesome</strong>. You are now logged in!
+    <button type="button" (click)="hide()" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <!-- alert for error update -->
+  <div *ngIf="isLoginError" class="alert alert-primary alert-dismissible fade show" role="alert">
+    <div>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+        class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+        <path
+          d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+      </svg>
+      Your login information is incorrect. Please try again.
+      <button type="button" (click)="hide()" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <button type="button" (click)="hide()" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
+
+  <!-- alert for error done subscription -->
+  <div *ngIf="isSubscribeError" class="alert alert-primary alert-dismissible fade show" role="alert">
+    <div>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+        class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+        <path
+          d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+      </svg>
+      Your subscription is expired. Please subscribe for access. 🙂
+      <button type="button" (click)="hide()" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <button type="button" (click)="hide()" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
+
+  <!-- alert for update resubscribe successfully -->
+  <div *ngIf="isResubscribeSuccessfully" class="alert alert-info alert-dismissible fade show" role="alert">
+    <strong>Great.</strong> You are now logged in!
+    <button type="button" (click)="hide()" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <!-- alert for error Multi Logged -->
+  <div *ngIf="isUserHasMultiLogged" class="alert alert-primary alert-dismissible fade show" role="alert">
+    <div>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+        class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+        <path
+          d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+      </svg>
+      You are already logged in on another machine or browser. You will need to
+      logout there before logging in here. * All accounts are automatically
+      logged out each day for your protection.
+      <button type="button" (click)="hide()" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <button type="button" (click)="hide()" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
+
+  <div class="title text-center mb-3">
+    <p class="h3">Login Beast Mode Analysis</p>
+  </div>
+
+  <!-- Start Login Form -->
+  <div class="container row">
+    <div class="col col-lg-6 offset-lg-3">
+      <form class="p-4" action="#" [formGroup]="form"
+        action="www.patreon.com/oauth2/authorize?response_type=code&client_id=8xIjmOHkGJieBeSt-JYRvzi8d3nGVhwmTvbPemEMIgYpyShm8CbFYVYa77H9WsjD&redirect_uri=http://localhost:4200&state=their_session_id">
+        <div class="email-container mb-3">
+          <label class="fw-bold" for="email">Email</label>
+          <input class="form-control" (keyup.enter)="login()" type="email" name="email" formControlName="email" />
+          <div *ngIf="
+              (form.controls.email.invalid && isLogged) ||
+              form.controls.email.dirty ||
+              form.controls.email.touched
+            ">
+            <small class="text-danger fw-bold mb-3" *ngIf="form.controls.email.hasError('required')">Email is
+              required</small>
+            <small class="text-danger fw-bold mb-3" *ngIf="form.controls.email.hasError('email')">Invalid Email
+            </small>
+            <small class="text-danger fw-bold mb-3" *ngIf="form.controls.email.hasError('maxlength')">
+              this is big email</small>
+          </div>
+        </div>
+        <div class="password-container mb-5">
+          <label class="fw-bold" for="password">Password</label>
+          <input class="form-control" (keyup.enter)="login()" type="password" name="password"
+            formControlName="password" />
+          <div *ngIf="
+              (form.controls.password.invalid && isLogged) ||
+              form.controls.password.dirty ||
+              form.controls.password.touched
+            ">
+            <small class="text-danger fw-bold mb-3" *ngIf="form.controls.password.hasError('required')">Password is
+              required</small>
+            <small class="text-danger fw-bold mb-3" *ngIf="form.controls.password.hasError('minlength')">You have to
+              write more than 8 characters</small>
+            <small class="text-danger fw-bold mb-3" *ngIf="form.controls.password.hasError('maxlength')">You have to
+              write less than 15 characters</small>
+          </div>
+        </div>
+        <div class="resubscribe-container mb-5" *ngIf="isUserNeedSubscribe">
+          <input type="button" (click)="RenderPaypalButton()" value="RESUBSCRIBE"
+            class="form-control bg-dark text-light" data-bs-toggle="modal" data-bs-target="#subscribeModal" />
+        </div>
+
+        <div *ngIf="!isUserNeedSubscribe" class="forget text-end m-2">
+          <a routerLink="/auth/forget-password">Forgot password</a>
+          <p class="text-danger fw-bold small text-center">
+            Please use a browser other than Chrome. (They are working on a
+            fix)Thanks.
+          </p>
+        </div>
+
+        <input *ngIf="!isUserNeedSubscribe" type="button" value="Log in"
+          [ngClass]="{ 'bg-success text-light': form.valid }" class="form-control" (click)="login()" />
+      </form>
+    </div>
+
+    <!-- New To Patreon -->
+    <div class="new-patreon text-center mt-3">
+      <p class="h6">
+        New To BeastMode?
+        <!-- <a class="btn btn-link" href="http://www.patreon.com/oauth2/authorize?response_type=code&client_id=8BNNHk815QuQxUu7du7TiB7AmRfmAt2kIUy3x4N8Tc5fN3tFtImZf4S1ORIbx5Cp&redirect_uri=https://jerryromine.com/admin/public/admin.php/api/patreon-register&state=xcoiv98y2kd22vusuye3kch">Sign Up</a> -->
+        <a class="btn btn-link" routerLink="/auth/register">Sign Up</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for resubscribe -->
+<div class="modal fade" id="subscribeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Resubscribe</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="paypal-button-container-P-62C08595CD314874VMGIRN6Y"></div>
+      </div>
+    </div>
+  </div>
+</div>

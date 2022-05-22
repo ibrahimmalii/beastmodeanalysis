@@ -1,0 +1,101 @@
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RequestService {
+
+  constructor() { }
+
+  // Handle request to store data ;
+  // data = {
+  //   'name': '',
+  //   'description': '',
+  //   'country': '',
+  //   'symbol': '',
+  //   'exchange': '',
+  //   'industry': '',
+  //   'sector': '',
+  //   'qfs_symbol': '',
+  //   'market_cap': [],
+  //   'enterprise_value': [],
+  //   'volume': [],
+  //   'average_daily_volume': [],
+  //   'volume_inc_dec': [],
+  //   'pe_ratio': [],
+  //   'ps_ratio': [],
+  //   'total_revenue': [],
+  //   'cogs': '',
+  //   'gross_profit': [],
+  //   'total_opex': [],
+  //   'operating_income': [],
+  //   'operating_margin': [],
+  //   'pretax_income': [],
+  //   'net_income': [],
+  //   'net_income_margin': [],
+  //   'total_current_assets': [],
+  //   'total_current_liabilities': [],
+  //   'total_assets': [],
+  //   'total_liabilities': [],
+  //   'revenue_growth': [],
+  //   'fcf_margin': [],
+  //   'roe': [],
+  //   'roa': [],
+  //   'roic': [],
+  //   'roce': [],
+  //   'rotce': [],
+  //   'dividends_per_share_cagr_10': [],
+  //   'payout_ratio': [],
+  //   'debt_to_equity': [],
+  //   'debt_to_assets': [],
+  //   'equity_to_assets': [],
+  //   'assets_to_equity': [],
+  //   'revenue_per_share': [],
+  //   'ebitda_per_share': [],
+  //   'operating_income_per_share': [],
+  //   'pretax_income_per_share': [],
+  //   'fcf_per_share': [],
+  //   'book_value_per_share': [],
+  //   'shares_eop_growth': [],
+  //   'net_income_growth': [],
+  //   'gross_profit_growth': [],
+  //   'fcf_growth': [],
+  //   'ebitda_growth': [],
+  //   'operating_income_growth': [],
+  //   'total_assets_growth': [],
+  //   'total_equity_growth': [],
+  //   'cfo_growth': [],
+  //   'revenue_cagr_10': [],
+  //   'eps_diluted_cagr_10': [],
+  //   'total_assets_cagr_10': [],
+  //   'total_equity_cagr_10': [],
+  //   'fcf_cagr_10': [],
+  //   'price_to_earnings' : [],
+  //   'price_to_sales' : [],
+  //   'dividends' : [],
+  //   'roe_median' : [],
+
+  //   'price_to_book' : [],
+  //   'enterprise_value_to_earnings' : [],
+  //   'enterprise_value_to_sales' : [],
+  //   'enterprise_value_to_pretax_income' : [],
+  //   'enterprise_value_to_fcf' : [],
+  //   'roa_median' : [],
+  //   'roic_median' : [],
+  //   'gross_margin_median' : [],
+  //   'pretax_margin_median' : [],
+  //   'fcf_margin_median' : [],
+  //   'assets_to_equity_median' : [],
+  //   'debt_to_equity_median' : [],
+  //   'debt_to_assets_median' : [],
+  //   'revenue' : [],
+  //   'gross_margin' : [],
+  //   'eps_diluted' : [],
+  //   'eps_diluted_growth' : [],
+  //   'dividends_per_share_growth' : []
+
+  // }
+
+  data = {};
+
+}

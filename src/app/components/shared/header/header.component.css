@@ -1,0 +1,12 @@
+
+.navbar-expand-lg{
+    background-color: var(--mc);
+    padding: 20px;
+}
+a{
+    color: white
+}
+
+nav{
+  z-index: 999999;
+}

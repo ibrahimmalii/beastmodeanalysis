@@ -1,0 +1,29 @@
+<div class='container text-center'>
+  <h2 class="mt-3">Beast Mode Stock Analysis Website</h2>
+  <table class="m-auto w-50 my-5 p-3" *ngIf="isPageLoaded">
+    <tr>
+      <th>
+        <h3>{{offers[0].title}}</h3>
+      </th>
+    </tr>
+    <tr>
+      <th>
+        <p>${{offers[0].price}} Monthly</p>
+        <P class="text-muted mt-2">
+          Watch This Video To See The Full Power Of Beast Mode Analysis.
+          <a href="https://youtu.be/OIeT7RUJWVg" target="_blank">https://youtu.be/OIeT7RUJWVg</a>
+        </P>
+        <button routerLink='/auth/register' class="btn btn-dark form-control w-50">Signup Now</button>
+      </th>
+      <!-- <th>${{offers[1].price}} Monthly</th>
+      <th>${{offers[2].price}} Monthly</th> -->
+    </tr>
+    <tr class="exchanges">
+      <td class="text-start">
+        <p class="mb-3 fw-bold">{{offers[0].description}}</p>
+        <p class="h4 mt-3">Stock Exchanges</p>
+        <p class="my-3" [innerHTML]="listOne"></p>
+      </td>
+    </tr>
+  </table>
+</div>

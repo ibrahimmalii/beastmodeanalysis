@@ -1,0 +1,135 @@
+<!-- alert for update data successfully -->
+<div *ngIf="isDataUpdated" class="alert alert-info alert-dismissible fade show" role="alert">
+  <strong>Good Job</strong>, Your password is updated successfully.
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<!-- alert for error update -->
+<div *ngIf="errorUpdate" class="alert alert-primary align-items-center fade show" role="alert">
+  <div>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+      class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+      <path
+        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+    </svg> please check your password and try again
+    <button type="button" class="btn-close pull-right" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+</div>
+
+<div class="card m-auto text-center parent" style="width: 50% " *ngIf="isPageLoaded">
+
+  <h2>{{username}}</h2>
+  <div class="card-body">
+    <table>
+      <tr class="">
+        <th class="text-start">Email</th>
+        <th>{{email}}</th>
+      </tr>
+      <tr class="" *ngIf="!isAdmin">
+        <th class="text-start">Subscription Expiration Date</th>
+        <th>{{subscription_data}}</th>
+      </tr>
+      <tr class="" *ngIf="!isAdmin">
+        <th class="text-start">Monthly Request Limit</th>
+        <th>{{request_limit}}</th>
+      </tr>
+      <tr *ngIf="!isAdmin">
+        <th class="text-start">Monthly Requests Made</th>
+        <th>{{yourrequest}}</th>
+      </tr>
+      <tr *ngIf="!isAdmin">
+        <th class="text-start"> Remaining Monthly Requests</th>
+        <th>{{request_limit - yourrequest}}</th>
+      </tr>
+      <tr *ngIf="!isAdmin">
+        <th class="text-start">Daily Request Limit</th>
+        <th>{{daily_requests_limit}}</th>
+      </tr>
+      <tr>
+        <th class="text-start">Daily Requests Made (Today)</th>
+        <th>{{daily_number_of_requests}}</th>
+      </tr>
+      <tr *ngIf="!isAdmin">
+        <th class="text-start">Remaining Daily Requests</th>
+        <th>{{daily_requests_limit - daily_number_of_requests}}</th>
+      </tr>
+      <tr *ngIf="!isAdmin" class="text-center">
+        <th class="" colspan="2"><p class="h3 text-secondary">Note: You can only log in to Beast Mode from one device at a time. Be sure to log out after using.</p></th>
+      </tr>
+    </table>
+    <div class="change-password my-3">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#company">Change Password</button>
+    </div>
+    <div class="reset-companies" *ngIf="isAdmin">
+      <button class="btn btn-danger mb-2" (click)="resetCompanies()">Reset Companies</button>
+    </div>
+    <div class="reset-logged-users" *ngIf="isAdmin">
+      <button class="btn btn-danger" (click)="resetLoggedUsers()">Reset Logged Users</button>
+    </div>
+    <div class="links">
+      <h3>OTHER USEFUL LINKS FROM JERRY ROMINE</h3>
+      <h6><a href="https://www.youtube.com/c/JerryRomineEntrepreneurAbroad" target="_blank">YouTube Channel</a></h6>
+      <h6><a href="https://www.patreon.com/jerryromine" target="_blank">Private Discord</a></h6>
+      <h6><a href="https://jerryromine.com/tradingview-indicators" target="_blank">TradingView Indicators</a></h6>
+      <h6><a href="https://jerryromine.com/" target="_blank">JerryRomine.com</a></h6>
+      <h5 class="text-success">The credit card transaction will appear on your statement as PAYPAL *VENJOIN LLC.</h5>
+    </div>
+  </div>
+</div>
+
+
+<!-- password section modal  -->
+<div class="modal fade changePassword" id="company" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Change Password</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="form" [formGroup]="form">
+          <label class="small form-check-label mt-3">Current Password</label>
+          <input type="password" name="password" formControlName="password" class="form-control">
+          <div
+            *ngIf="form.controls.password.invalid && isLogged || (form.controls.password.dirty || form.controls.password.touched)">
+            <small class="text-danger fw-bold mb-3" *ngIf="form.controls.password.hasError('required')">Password is
+              required</small>
+            <small class="text-danger fw-bold mb-3" *ngIf="form.controls.password.hasError('minlength')">You have to
+              write more than 8 characters</small>
+          </div>
+
+          <label class="small form-check-label mt-3">New password</label>
+          <input type="password" name="new_password" [(ngModel)]="new_password" formControlName="new_password"
+            class="form-control">
+          <div
+            *ngIf="form.controls.new_password.invalid && isLogged || (form.controls.new_password.dirty || form.controls.new_password.touched)">
+            <small class="text-danger fw-bold mb-3" *ngIf="form.controls.new_password.hasError('required')">Password is
+              required</small>
+            <small class="text-danger fw-bold mb-3" *ngIf="form.controls.new_password.hasError('minlength')">You have to
+              write more than 8 characters</small>
+          </div>
+
+          <label class="small form-check-label mt-3">Confirm New Password</label>
+          <input type="password" [(ngModel)]="new_password_confirmation" name="new_password_confirmation"
+            class="form-control" formControlName="new_password_confirmation" />
+          <div
+            *ngIf="form.controls.new_password_confirmation.invalid && form.controls.new_password_confirmation.dirty || form.controls.new_password_confirmation.touched">
+            <small class="text-danger fw-bold mb-3"
+              *ngIf="form.controls.new_password_confirmation.hasError('required')">This field is required</small>
+            <small class="text-danger fw-bold mb-3" *ngIf="new_password != new_password_confirmation">You have to write
+              similar password </small>
+          </div>
+
+          <!-- <input type="checkbox" class="mx-2"> <span class="small text-muted">All devices will be required to sign in with new password</span><br> -->
+          <div class="form-group mt-5 card-footer">
+            <button type="submit" (click)="changePassword()" class="btn" data-bs-dismiss="modal"
+              aria-label="Close">Save</button>
+            <button type="button" class="btn mx-2" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End password section modal  -->
+

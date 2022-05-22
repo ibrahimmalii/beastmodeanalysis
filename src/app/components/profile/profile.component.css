@@ -1,0 +1,17 @@
+tr,td ,th{
+    width: 70%;
+    padding: 5px 0;
+    /* text-align: center; */
+}
+table{
+    margin: auto;
+}
+.parent{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: var(--mc);
+}
+
+.changePassword{
+  margin-top: 70px;
+}

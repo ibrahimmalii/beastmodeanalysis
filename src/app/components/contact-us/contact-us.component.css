@@ -1,0 +1,16 @@
+ul{
+  list-style-type: none;
+  display: flex;
+  margin-top: 50px;
+}
+li{
+  padding-right: 10px;
+}
+a{
+  color: black;
+  text-decoration: none;
+}
+
+.contact{
+  margin: 170px auto;
+}

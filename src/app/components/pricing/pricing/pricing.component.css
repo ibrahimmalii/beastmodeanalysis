@@ -1,0 +1,172 @@
+* {
+  margin: 0%;
+  padding: 0%;
+  font-weight: bold;
+  color: black;
+  /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+  /* padding-top: 300px; */
+}
+
+.col,
+.rightProp {
+  margin-top: 131px;
+}
+
+.reset {
+  width: 100px;
+  background-color: yellow;
+  color: black;
+}
+
+.success {
+  display: block;
+}
+
+.danger {
+  display: none;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  border: 1px solid rgb(111, 250, 208);
+}
+
+
+input {
+  outline: none;
+  border: none;
+  margin-left: 0;
+}
+
+li,
+li>input {
+  padding-left: 0;
+  padding-right: 0;
+  margin: 0;
+}
+
+.model {
+  position: absolute;
+}
+
+.loader>img {
+  width: 50px;
+  height: 50px;
+}
+
+.loading {
+  height: 51px;
+}
+
+.content input {
+  width: 90%;
+}
+
+.orange {
+  color: orangered
+}
+
+li {
+  height: 30px;
+  text-indent: 2px;
+  overflow: hidden;
+}
+
+.rightElements {
+  direction: rtl;
+}
+
+
+/* Rows and cells styles */
+.long-item {
+  width: 100vw;
+  text-indent: 0;
+  position: absolute;
+  margin-bottom: 10px;
+  color: yellow
+}
+
+.marginTop {
+  margin-top: 24px;
+}
+
+.blue {
+  font-weight: bold;
+  background-color: #03FFFF;
+}
+
+.ratio {
+  background-color: #03FFFF;
+  font-weight: 800px;
+}
+
+.light-green {
+  background-color: #01FF8F;
+  font-weight: 800px;
+}
+
+.green {
+  background: #00FF0D;
+  font-weight: bold;
+}
+
+
+.maxValue {
+  /* text-indent: 18px; */
+  color: blue;
+  font-weight: bold;
+}
+
+.minValue {
+  /* text-indent: 18px; */
+  color: red;
+  font-weight: bold;
+}
+
+.bg-brown {
+  background-color: brown;
+}
+
+.higherThanOne {
+  background-color: #00FF0D;
+}
+
+.fiveR {
+  background-color: #03FFFF;
+}
+
+.divYield {
+  background-color: #FFE0CB;
+}
+
+.static {
+  position: fixed;
+  top: 89px;
+  width: 100%;
+  z-index: 999999;
+}
+
+.col>div,
+.headerEle {
+  position: fixed;
+  top: 170px;
+  width: 14%;
+  z-index: 999999;
+}
+
+.headerEle {
+  width: 20%;
+}
+
+
+.lessZeroOrHigherHundred {
+  color: orangered
+}
+
+
+.yellow {
+  color: yellow
+}

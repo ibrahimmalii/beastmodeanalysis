@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+@import "~quill/dist/quill.core.css";
+@import "~quill/dist/quill.bubble.css";
+@import "~quill/dist/quill.snow.css";
+
+/* Constant Colors */
+:root {
+  --mc: #000032;
+  --sc: #63ff1a;
+  --tc: #000;
+  --fc: #d29f96;
+  --bg: #fff6f4;
+  --h5: #fffb1a;
+  --text: #868096;
+}
+
+body {
+  padding-top: 100px;
+}

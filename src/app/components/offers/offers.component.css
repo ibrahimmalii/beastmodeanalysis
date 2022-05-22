@@ -1,0 +1,20 @@
+table
+{
+  border: 2px solid gray;
+}
+tr,th,td{
+  border: 2px solid gray;
+  padding: 10px;
+}
+
+
+
+.bma{
+  /* line-height: 20px;
+  height:30px */
+  /* margin-top: -200px; */
+}
+
+td,th{
+  width:33.33333%
+}
